@@ -15,9 +15,10 @@ WhereAbouts is an effort to put a friendlier face on location tracking loved one
 For this project I set 3 primary user stories
 
 ### User Stories
-* As a ***Publisher*** I want to ***Publish location Data through secured connection*** so that I can ***Tell my wife that I'm heading home***
+* As a ***Publisher*** I want to ***Publish location data through secured connection*** so that I can ***Tell my wife that I'm heading home***
 * As a ***Subscriber*** I want to ***Connect and subscribe to location data from the Publisher*** so that I can ***Be notified that my husband is heading home***
-* As a ***New User*** I want to ***Set Geofence waypoints*** so that I can ***Customize the notifications published to the broker***
+* As a ***New User*** I want to ***Set geofence waypoints*** so that I can ***Customize the notifications published to the broker***
+* As a ***New User*** I want to ***Setup secure MQTT broker on the Raspberry Pi*** so that I can ***Securely publish and subscribe to location notifications*** 
 
 
 
