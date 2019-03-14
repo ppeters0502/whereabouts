@@ -9,6 +9,16 @@ WhereAbouts is an effort to put a friendlier face on location tracking loved one
 * Connect to MQTT Broker using TLS secured connection
 * Publish location data on MQTT broker through secured connection
 * Connect to MQTT broker (Raspberry Pi) through bluetooth to get security certificate and configure user credentials
+* Establish Geofence Waypoints to trigger enter/exit reactions to trigger changes
+
+## Application Requirements
+For this project I set 3 primary user stories
+
+### User Stories
+* As a ***Publisher*** I want to ***Publish location Data through secured connection*** so that I can ***Tell my wife that I'm heading home***
+* As a ***Subscriber*** I want to ***Connect and subscribe to location data from the Publisher*** so that I can ***Be notified that my husband is heading home***
+* As a ***New User*** I want to ***Set Geofence waypoints*** so that I can ***Customize the notifications published to the broker***
+
 
 
 
