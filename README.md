@@ -68,6 +68,7 @@ As a ***bad actor*** I want to ***steal TLS certificate and user credentials dur
 * Android MQTT Library - Currently checking out [Eclipse Paho project for messaging](https://www.eclipse.org/paho/)
 * MQTT Broker Server Software (on the Raspberry Pi) - Currently leaning towards [Mosquitto](https://mosquitto.org/)
 * Google Maps API for Waypoint configuration
+* Bluetooth Low Energy - Connection between Raspberry Pi and Phone for exchanging credentials and TLS certificate
 
 
 ## Security Analysis
@@ -75,6 +76,7 @@ As a ***bad actor*** I want to ***steal TLS certificate and user credentials dur
 |----------------|---------------------------|-------------------|-----------|
 | Android MQTT Library | Unauthorized Access | MQTT brokers by default require no authentication, no encryption and are very easy to setup initially with no security mechanisms in place. This would leave plaintext posts of location data freely available | MQTT supports client authentication (when enabled) and connections using TLS encryption. non-encrypted port would need to be closed and non-authenticated requests prohibitted through MQTT config |
 | MQTT Broker Server Software | Denial of Service | The MQTT broker could be impacted by a Denial of Service attack | When QoS is enabled in the MQTT messaging, you can specify a QoS of 0 for high traffic brokers, in which case no ack-response receipt is given by the broker to the publisher upon receiving message, no message is stored by the broker, and the message is not re-transmitted by the sender. |
+| Bluetooth Low Energy | Bluetooth sniffing | Bad Actor could monitor the bluetooth traffic going between the Raspberry Pi and the phone for new setups. This risk is amplified in that BLE connection would be required for new device setups, which would more than likely require a BLE pairing too, which was described as a major risk during the BLE lecture. | If it's possible, limit the range of the bluetooth broadcast to prevent bad actors from being able to sniff Bluetooth traffice from longer distances. Also encrypt user credentials and TLS certificate prior to BLE transmission. |
 
 
 
