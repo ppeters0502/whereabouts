@@ -70,6 +70,12 @@ As a ***bad actor*** I want to ***steal TLS certificate and user credentials dur
 * Google Maps API for Waypoint configuration
 
 
+## Security Analysis
+| Component Name | Category of Vulnerability | Issue Description | Mitigation|
+|----------------|---------------------------|-------------------|-----------|
+| Android MQTT Library | Unauthorized Access | MQTT brokers by default require no authentication, no encryption and are very easy to setup initially with no security mechanisms in place. This would leave plaintext posts of location data freely available | MQTT supports client authentication (when enabled) and connections using TLS encryption. non-encrypted port would need to be closed and non-authenticated requests prohibitted through MQTT config |
+| MQTT Broker Server Software | Denial of Service | The MQTT broker could be impacted by a Denial of Service attack | When QoS is enabled in the MQTT messaging, you can specify a QoS of 0 for high traffic brokers, in which case no ack-response receipt is given by the broker to the publisher upon receiving message, no message is stored by the broker, and the message is not re-transmitted by the sender. |
+
 
 
 
