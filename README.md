@@ -12,7 +12,7 @@ WhereAbouts is an effort to put a friendlier face on location tracking loved one
 * Establish Geofence Waypoints to trigger enter/exit reactions to trigger changes
 
 ## Application Requirements
-For this project I set 3 primary user stories
+For this project I set 3 primary user stories and then a stretch goal with waypoints
 
 ### User Stories
 As a ***Publisher*** I want to ***Publish location data through secured connection*** so that I can ***Tell my wife that I'm heading home***
@@ -27,8 +27,23 @@ As a ***Subscriber*** I want to ***Connect and subscribe to location data from t
 * A different user than the publisher will simultaneously connect to an MQTT broker through a secure TLS-encrypted connection
 * Once connected, the user will subscribe to the topic that the publisher is publishing their location to, and will receive the GPS location data automatically when the original user publishes it.
 
-* As a ***New User*** I want to ***Set geofence waypoints*** so that I can ***Customize the notifications published to the broker***
+
 * As a ***New User*** I want to ***Setup secure MQTT broker on the Raspberry Pi*** so that I can ***Securely publish and subscribe to location notifications*** 
+
+***Acceptance Criteria***
+* The MQTT broker can be hosted on a Raspberry Pi, which can be setup with Node-Red to receive notifications from itself (through a subscription to the broker)
+* When setting up the broker, the user can obtain the TLS certificate and user credentials through a bluetooth connection to the already running Raspberry Pi
+
+
+### Stretch Goal - Google Maps integration with waypoints
+* As a ***New User*** I want to ***Set geofence waypoints*** so that I can ***Customize the notifications published to the broker***
+
+***Acceptance Criteria***
+* The user publishing their location will open a Google maps view where they can select an address or their current location
+* Once they have the location for a new waypoint created, they input the radius of their waypoint and save the new way point
+* Whenever they enter or exit where the waypoint is setup at, a custom notification is generated and published to the MQTT broker
+
+
 
 
 
