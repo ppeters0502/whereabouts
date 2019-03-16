@@ -55,6 +55,21 @@ As a ***bad actor*** I want to ***steal TLS certificate and user credentials dur
 * Encrypt plain text of TLS certificate and credentials before sending over less secure BLE connection
 * Find a way to limit BLE broadcast on Raspberry Pi to shorter range since bluetooth data transfer only happens on new device setups.
 
+## High Level Design
+![design](High-level-design.png)
+
+## Components List
+
+### Hardware Components
+* At least 2 Android Phones - Runs the WhereAbouts app and either publishes or subscribes to new GPS coordinates published
+* Raspberry Pi - Acts as MQTT broker to receive requests from phones.
+
+### Software Components
+* Android MQTT Library - Currently checking out [Eclipse Paho project for messaging](https://www.eclipse.org/paho/)
+* MQTT Broker Server Software (on the Raspberry Pi) - Currently leaning towards [Mosquitto](https://mosquitto.org/)
+* Google Maps API for Waypoint configuration
+
+
 
 
 
