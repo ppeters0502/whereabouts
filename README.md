@@ -27,8 +27,7 @@ As a ***Subscriber*** I want to ***Connect and subscribe to location data from t
 * A different user than the publisher will simultaneously connect to an MQTT broker through a secure TLS-encrypted connection
 * Once connected, the user will subscribe to the topic that the publisher is publishing their location to, and will receive the GPS location data automatically when the original user publishes it.
 
-
-* As a ***New User*** I want to ***Setup secure MQTT broker on the Raspberry Pi*** so that I can ***Securely publish and subscribe to location notifications*** 
+As a ***New User*** I want to ***Setup secure MQTT broker on the Raspberry Pi*** so that I can ***Securely publish and subscribe to location notifications*** 
 
 ***Acceptance Criteria***
 * The MQTT broker can be hosted on a Raspberry Pi, which can be setup with Node-Red to receive notifications from itself (through a subscription to the broker)
@@ -36,14 +35,25 @@ As a ***Subscriber*** I want to ***Connect and subscribe to location data from t
 
 
 ### Stretch Goal - Google Maps integration with waypoints
-* As a ***New User*** I want to ***Set geofence waypoints*** so that I can ***Customize the notifications published to the broker***
+As a ***New User*** I want to ***Set geofence waypoints*** so that I can ***Customize the notifications published to the broker***
 
 ***Acceptance Criteria***
 * The user publishing their location will open a Google maps view where they can select an address or their current location
 * Once they have the location for a new waypoint created, they input the radius of their waypoint and save the new way point
 * Whenever they enter or exit where the waypoint is setup at, a custom notification is generated and published to the MQTT broker
 
+### Misuser Stories
+As a ***malicious phone hacker***, I want to ***sniff packets of published location data requests*** so I can ***get unauthorized access to the user's location and subscriptions***
 
+***Mitigations:***
+* Use TLS encryption for MQTT published messages 
+* Application should also only publish location data to the authorized MQTT broker through secure channel with authentication
+
+As a ***bad actor*** I want to ***steal TLS certificate and user credentials during bluetooth transfer*** so I can ***gain unauthorized access to the MQTT broker***
+
+***Mitigations***
+* Encrypt plain text of TLS certificate and credentials before sending over less secure BLE connection
+* Find a way to limit BLE broadcast on Raspberry Pi to shorter range since bluetooth data transfer only happens on new device setups.
 
 
 
