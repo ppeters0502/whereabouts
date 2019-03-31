@@ -10,6 +10,8 @@ User opens application for first time. User creates profile with username and pa
 ### Use Case 2 - Connect to Broker and subscribe to user
 User logs in to application. Application is already connected to MQTT broker with stored username, password, and TLS Certificate. User browses other users that are on the broker they are connected to. User subscribes to different user to receive location updates. User is now subscribed for updates. User closes application
 
+### Use Case 2 with nouns in italics and verbs in bold
+*User* **logs in** to *application*. *Application* is already **connected** to *MQTT broker* with stored *username, password, and TLS Certificate*. *User* **browses** other *users* that are on the *broker* they are connected to. *User* **subscribes** to different *user* to **receive** location *updates*. *User* is now **subscribed** for *updates*. *User* **closes** *application*
 
 ### Use Case 3 - Receive Notification from subscribed user
 Application connects to MQTT Broker. Different user publishes location data. 
