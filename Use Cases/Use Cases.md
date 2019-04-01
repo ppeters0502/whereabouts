@@ -77,5 +77,36 @@ From the Use Cases identified above, here is list of most common nouns and verbs
 | Publishes New Notification |
 | Enters Waypoint Geofence |
 
+We now go through the two lists to find the redundant verbs/nouns that fit into each other and keep the nouns/verbs that make more sense put together into classes, methods, and class attributes.
+In this case, the three main sets of nouns that can be separated into classes are tied into one of four things:
+* User
+* MQTT Broker
+* Individual Notification
+* Waypoint
+
+By organizing the nouns this way, I think I figured out the preliminary classes with their attributes. This isn't set in stone by any means, but at the moment this is what makes the most sense.
+| Class | Attribute | 
+| ---------------------------------- | ---- |
+| User | Profile Username |
+| User | Profile Password |
+| User | MQTT Brokers |
+| User | Waypoints |
+| User | Subscriptions | 
+| Broker | Broker Username |
+| Broker | Broker Password |
+| Broker | Broker Certificate |
+| Broker | Broker Topic | 
+| Broker | Broker Users |
+| Notification | Published/Subscription? |
+| Notification | TimeStamp |
+| Notification | Published By | 
+| Notification | Topic Published in |
+| Notification | Broker Published on |
+| Waypoint | Latitude |
+| Waypoint | Longitude |
+| Waypoint | Radius | 
+| Waypoint | Waypoint Owner | 
+
+
 
 
