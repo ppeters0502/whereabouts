@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/publishText"
         android:layout_width="wrap_content"
         android:layout_height="42dp"
         android:ems="10"
@@ -27,7 +27,7 @@
         tools:layout_editor_absoluteY="32dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/publishButton"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         tools:layout_editor_absoluteY="194dp" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/subscribeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -46,12 +46,31 @@
         tools:layout_editor_absoluteY="301dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/subscribeButton"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Subscribe"
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="355dp" />
+
+    <EditText
+        android:id="@+id/unSubscribeText"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="Unsubscribe from a topic"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="444dp" />
+
+    <Button
+        android:id="@+id/unSubscribeButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="521dp" />
 
 </android.support.constraint.ConstraintLayout>
