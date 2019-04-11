@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <EditText
-        android:id="@+id/publishText"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:ems="10"
-        android:hint="Enter message to publish"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="141dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -26,14 +16,31 @@
         tools:layout_editor_absoluteX="50dp"
         tools:layout_editor_absoluteY="32dp" />
 
+    <EditText
+        android:id="@+id/publishText"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter message to publish"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/textView"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="141dp" />
+
     <Button
         android:id="@+id/publishButton"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="124dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="11dp"
         android:text="Publish"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="194dp" />
+        app:layout_constraintLeft_toRightOf="@+id/publishText"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_below="@+id/publishText" />
 
     <EditText
         android:id="@+id/subscribeText"
@@ -42,6 +49,8 @@
         android:ems="10"
         android:hint="Subscribe to a Topic"
         android:inputType="textPersonName"
+        android:layout_below="@+id/publishButton"
+        android:layout_marginTop="24dp"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="301dp" />
 
@@ -51,6 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Subscribe"
+        android:layout_below="@+id/subscribeText"
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="355dp" />
 
@@ -61,6 +71,7 @@
         android:ems="10"
         android:hint="Unsubscribe from a topic"
         android:inputType="textPersonName"
+        android:layout_below="@+id/subscribeButton"
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="444dp" />
 
@@ -70,7 +81,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
+        android:layout_below="@+id/unSubscribeText"
         tools:layout_editor_absoluteX="36dp"
         tools:layout_editor_absoluteY="521dp" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
