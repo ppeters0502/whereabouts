@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.views;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.models.Waypoint;
 
 import java.util.ArrayList;

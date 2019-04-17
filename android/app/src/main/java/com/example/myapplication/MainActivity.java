@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myapplication.services.MqttMessageService;
+import com.example.myapplication.services.PahoMqttClient;
 import com.example.myapplication.views.WaypointActivity;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;

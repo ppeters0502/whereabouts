@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.myapplication.R;
-import com.example.myapplication.WaypointCardViewAdapter;
 import com.example.myapplication.models.Waypoint;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class WaypointActivity extends AppCompatActivity {
 
     private ArrayList<Waypoint> getDataSet(){
         ArrayList results = new ArrayList<Waypoint>();
-        for(int i = 0; i<6; i++){
+        for(int i = 0; i<2; i++){
             Waypoint obj = new Waypoint(41.266228, -95.837593, 150, "Home-"+i);
             results.add(i, obj);
         }

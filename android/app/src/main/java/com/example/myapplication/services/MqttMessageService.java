@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.example.myapplication.Constants;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
+import com.example.myapplication.services.PahoMqttClient;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
