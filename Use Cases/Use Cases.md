@@ -85,27 +85,28 @@ In this case, the three main sets of nouns that can be separated into classes ar
 * Waypoint
 
 By organizing the nouns this way, I think I figured out the preliminary classes with their attributes. This isn't set in stone by any means, but at the moment this is what makes the most sense.
-| Class | Attribute | 
-| ---------------------------------- | ---- |
-| User | Profile Username |
-| User | Profile Password |
-| User | MQTT Brokers |
-| User | Waypoints |
-| User | Subscriptions | 
-| Broker | Broker Username |
-| Broker | Broker Password |
-| Broker | Broker Certificate |
-| Broker | Broker Topic | 
-| Broker | Broker Users |
+
+| Class        | Property/Attribute      |
+|--------------|-------------------------|
+|      User    | Profile Username        |
+| User         | Profile Password        |
+| User         | MQTT Brokers            |
+| User         | Waypoints               |
+| User         | Subscriptions           |
+| Broker       | Broker Username         |
+| Broker       | Broker Password         |
+| Broker       | Broker Certificate      |
+| Broker       | Broker Topic            |
+| Broker       | Broker Users            |
 | Notification | Published/Subscription? |
-| Notification | TimeStamp |
-| Notification | Published By | 
-| Notification | Topic Published in |
-| Notification | Broker Published on |
-| Waypoint | Latitude |
-| Waypoint | Longitude |
-| Waypoint | Radius | 
-| Waypoint | Waypoint Owner | 
+| Notification | TimeStamp               |
+| Notification | Published By            |
+| Notification | Topic Published in      |
+| Notification | Broker Published on     |
+| Waypoint     | Latitude                |
+| Waypoint     | Longitude               |
+| Waypoint     | Radius                  |
+| Waypoint     | Waypoint Owner          |
 
 
 
