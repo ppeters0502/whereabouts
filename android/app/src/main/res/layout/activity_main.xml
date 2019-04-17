@@ -16,6 +16,16 @@
         tools:layout_editor_absoluteX="50dp"
         tools:layout_editor_absoluteY="32dp" />
 
+    <Button
+        android:id="@+id/newViewButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/textView"
+        android:layout_toRightOf="@id/textView"
+        android:text="Waypoints"
+        tools:layout_editor_absoluteX="300dp"
+        tools:layout_editor_absoluteY="50dp" />
     <EditText
         android:id="@+id/publishText"
         android:layout_width="240dp"
@@ -80,9 +90,12 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="Unsubscribe"
         android:layout_below="@+id/unSubscribeText"
         tools:layout_editor_absoluteX="36dp"
         tools:layout_editor_absoluteY="521dp" />
+
+
+
 
 </RelativeLayout>

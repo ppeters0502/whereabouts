@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -45,6 +44,7 @@ public class MqttMessageService extends Service {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
                 setMessageNotification(s, new String(mqttMessage.getPayload()));
@@ -77,6 +77,17 @@ public class MqttMessageService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void setMessageNotification(@NonNull String topic, @NonNull String msg){
+        /*
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_message_black_24dp)
+                .setContentTitle(topic)
+                .setContentText(msg)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+*/
+
+
+
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_message_black_24dp)
                 .setContentTitle(topic)
@@ -92,5 +103,6 @@ public class MqttMessageService extends Service {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(100, mBuilder.build());
+
     }
 }

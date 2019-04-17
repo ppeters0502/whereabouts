@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myapplication.views.WaypointActivity;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -18,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private PahoMqttClient pahoMqttClient;
 
     private EditText textMessage, subscribeTopic, unSubscribeTopic;
-    private Button publishMessage, subscribe, unSubscribe;
+    private Button publishMessage, subscribe, unSubscribe, waypoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +31,10 @@ public class MainActivity extends AppCompatActivity {
         textMessage = (EditText) findViewById(R.id.publishText);
         publishMessage = (Button) findViewById(R.id.publishButton);
 
-        subscribe = (Button) findViewById(R.id.subscribeButton);
-        unSubscribe = (Button) findViewById(R.id.unSubscribeButton);
+        waypoints = (Button) findViewById(R.id.newViewButton);
 
+        subscribe = (Button) findViewById(R.id.subscribeButton);
+        //unSubscribe = (Button) findViewById(R.id.unSubscribeButton);
         subscribeTopic = (EditText) findViewById(R.id.subscribeText);
         unSubscribeTopic = (EditText) findViewById(R.id.unSubscribeText);
         client = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
@@ -56,32 +59,21 @@ public class MainActivity extends AppCompatActivity {
         subscribe.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String topic = subscribeTopic.getText().toString().trim();
-                if(!topic.isEmpty())
-                {
-                    try{
-                        pahoMqttClient.subscribe(client, topic, 1);
-                    } catch(MqttException e){
-                        e.printStackTrace();
-                    }
-                }
+                addWaypoint(v);
             }
         });
 
-        unSubscribe.setOnClickListener(new View.OnClickListener(){
+        waypoints.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String topic = unSubscribeTopic.getText().toString().trim();
-                if(!topic.isEmpty()){
-                    try{
-                        pahoMqttClient.unSubscribe(client, topic);
-                    } catch(MqttException e){
-                        e.printStackTrace();
-                    }
-                }
+                addWaypoint(v);
             }
         });
         Intent intent = new Intent(MainActivity.this, MqttMessageService.class);
         startService(intent);
+    }
+    public void addWaypoint (View view){
+        Intent intent = new Intent(this, WaypointActivity.class);
+        startActivity(intent);
     }
 }
