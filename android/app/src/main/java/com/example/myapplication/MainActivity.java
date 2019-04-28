@@ -14,6 +14,7 @@ import com.example.myapplication.views.WaypointActivity;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+
 import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pahoMqttClient = new PahoMqttClient();
-
+        private GeofencingClient geofencingClient;
         textMessage = (EditText) findViewById(R.id.publishText);
         publishMessage = (Button) findViewById(R.id.publishButton);
 

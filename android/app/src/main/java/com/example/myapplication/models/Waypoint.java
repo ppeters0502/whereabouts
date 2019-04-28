@@ -40,5 +40,9 @@ public class Waypoint {
         this.radius = r;
     }
 
+    public void saveWayPoint(){
+
+    }
+
 
 }
