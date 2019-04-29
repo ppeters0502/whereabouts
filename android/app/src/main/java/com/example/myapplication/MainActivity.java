@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pahoMqttClient = new PahoMqttClient();
-        private GeofencingClient geofencingClient;
+      //  private GeofencingClient geofencingClient;
         textMessage = (EditText) findViewById(R.id.publishText);
         publishMessage = (Button) findViewById(R.id.publishButton);
 

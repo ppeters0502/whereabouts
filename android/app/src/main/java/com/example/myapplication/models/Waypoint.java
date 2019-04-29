@@ -1,13 +1,16 @@
 package com.example.myapplication.models;
+import com.google.android.gms.location.Geofence;
 
 public class Waypoint {
+    private final String requestId;
     private double Lat;
     private double Long;
     private int radius;
     private String WaypointName;
 
-    public Waypoint(double latitude, double longitude, int radius, String name)
+    public Waypoint(String rID, double latitude, double longitude, int radius, String name)
     {
+        this.requestId = rID;
         this.Lat = latitude;
         this.Long = longitude;
         this.radius = radius;
@@ -43,6 +46,7 @@ public class Waypoint {
     public void saveWayPoint(){
 
     }
+
 
 
 }

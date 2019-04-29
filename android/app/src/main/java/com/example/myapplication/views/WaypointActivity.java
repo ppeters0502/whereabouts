@@ -1,13 +1,16 @@
 package com.example.myapplication.views;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.myapplication.R;
+import com.example.myapplication.WayPointSelectionActivity;
 import com.example.myapplication.models.Waypoint;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ public class WaypointActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private static String LOG_TAG = "CardViewActivity";
+    private Button addWaypoint;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +32,11 @@ public class WaypointActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new WaypointCardViewAdapter(getDataSet());
         mRecyclerView.setAdapter(mAdapter);
+        addWaypoint = (Button) findViewById(R.id.newWaypoint);
+        addWaypoint.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){ addNewWaypoint(v); }
+        });
     }
     @Override
     protected void onResume() {
@@ -44,9 +53,13 @@ public class WaypointActivity extends AppCompatActivity {
     private ArrayList<Waypoint> getDataSet(){
         ArrayList results = new ArrayList<Waypoint>();
         for(int i = 0; i<2; i++){
-            Waypoint obj = new Waypoint(41.266228, -95.837593, 150, "Home-"+i);
+            Waypoint obj = new Waypoint(""+i,41.266228, -95.837593, 150, "Home-"+i);
             results.add(i, obj);
         }
         return results;
+    }
+    private void addNewWaypoint(View view){
+        Intent intent = new Intent(this, WayPointSelectionActivity.class);
+        startActivity(intent);
     }
 }

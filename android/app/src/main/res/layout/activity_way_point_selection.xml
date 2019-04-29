@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WayPointSelectionActivity">
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,4 +10,33 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.WayPointSelectionActivity" />
+    tools:context=".WayPointSelectionActivity" />
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:background="#cc3b60a7"
+            android:orientation="horizontal" >
+            <ImageButton
+                android:id="@+id/buttonCurrent"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="15dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/current"/>
+            <Button
+                android:id="@+id/buttonSave"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="Save"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
