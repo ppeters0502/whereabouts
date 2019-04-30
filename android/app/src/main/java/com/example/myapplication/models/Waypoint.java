@@ -2,19 +2,20 @@ package com.example.myapplication.models;
 import com.google.android.gms.location.Geofence;
 
 public class Waypoint {
-    private final String requestId;
+    //private final String requestId;
     private double Lat;
     private double Long;
     private int radius;
     private String WaypointName;
 
-    public Waypoint(String rID, double latitude, double longitude, int radius, String name)
+    //public Waypoint(String rID, double latitude, double longitude, int radius, String name)
+    public Waypoint(String name, double latitude, double longitude, int radius)
     {
-        this.requestId = rID;
+        this.WaypointName = name;
         this.Lat = latitude;
         this.Long = longitude;
         this.radius = radius;
-        this.WaypointName = name;
+
     }
     public String getWaypointName(){
         return this.WaypointName;

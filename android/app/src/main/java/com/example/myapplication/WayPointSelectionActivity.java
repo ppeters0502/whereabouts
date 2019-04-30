@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -8,8 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -38,10 +42,12 @@ public class WayPointSelectionActivity extends FragmentActivity implements OnMap
 
     private double longitude;
     private double latitude;
-
+    private static final String TAG = WayPointSelectionActivity.class.getSimpleName();
     //Buttons
     private ImageButton buttonCurrent;
     private Button buttonSave;
+    private EditText radius;
+    private EditText waypointName;
     //Google ApiClient
     private GoogleApiClient googleApiClient;
 
@@ -71,7 +77,10 @@ public class WayPointSelectionActivity extends FragmentActivity implements OnMap
                 moveMap();
             }
         });
-        buttonCurrent.setOnClickListener(this);
+        buttonSave.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){ submitResults(v); }
+        });
     }
 
     @Override
@@ -113,6 +122,8 @@ public class WayPointSelectionActivity extends FragmentActivity implements OnMap
     //Grab the current location
     private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -135,6 +146,23 @@ public class WayPointSelectionActivity extends FragmentActivity implements OnMap
                     }
                 });
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)  {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                longitude = location.getLongitude();
+                                latitude = location.getLatitude();
+                                moveMap();
+                            }
+                        }
+                    });
+        }
+    }
 
     //custom function to move the map
     private void moveMap(){
@@ -151,10 +179,10 @@ public class WayPointSelectionActivity extends FragmentActivity implements OnMap
         .title("Current Location"));
 
         //Now to move the camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
 
         //make it pretty!
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 
         //finally display the current coordinates in a toast
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
@@ -170,17 +198,18 @@ public class WayPointSelectionActivity extends FragmentActivity implements OnMap
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.i(TAG, "onConnected()");
         getCurrentLocation();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.w(TAG, "onConnectionSuspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.w(TAG, "onConnectionFailed()");
     }
 
     @Override
@@ -212,5 +241,22 @@ public class WayPointSelectionActivity extends FragmentActivity implements OnMap
 
         //move the map, which also makes the toast
         moveMap();
+    }
+
+    public void submitResults(View v){
+        radius = (EditText) findViewById(R.id.radius);
+        waypointName = (EditText) findViewById(R.id.name);
+        Intent intent = new Intent();
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        int rad = Integer.valueOf(radius.getText().toString());
+        if(rad > 0)
+            intent.putExtra("radius", rad);
+        else
+            intent.putExtra("radius", 100);
+        String name = waypointName.getText().toString();
+        intent.putExtra("name", name);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

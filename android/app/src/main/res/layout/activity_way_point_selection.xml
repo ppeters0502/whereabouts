@@ -34,9 +34,32 @@
                 android:id="@+id/buttonSave"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:text="Save"
-                android:layout_width="150dp"
+                android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_margin="5dp" />
+            <EditText
+                android:id="@+id/radius"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@color/cardview_light_background"
+                android:ems="10"
+                android:hint="Radius"
+                android:layout_toEndOf="@id/buttonSave"
+                android:layout_toRightOf="@id/buttonSave"
+                android:layout_marginTop="16dp"
+                android:inputType="numberDecimal"/>
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@color/cardview_light_background"
+                android:ems="10"
+                android:hint="Name"
+                android:layout_toEndOf="@id/radius"
+                android:layout_toRightOf="@id/buttonSave"
+                android:layout_marginTop="16dp"
+                android:inputType="textPersonName"/>
+
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
