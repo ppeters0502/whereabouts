@@ -83,32 +83,23 @@ public class MqttMessageService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void setMessageNotification(@NonNull String topic, @NonNull String msg){
-        /*
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "MQTT Channel")
                 .setSmallIcon(R.drawable.ic_message_black_24dp)
                 .setContentTitle(topic)
                 .setContentText(msg)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-*/
-
-
-
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_message_black_24dp)
-                .setContentTitle(topic)
-                .setContentText(msg);
         Intent resultIntent = new Intent(this, MainActivity.class);
+
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
+        builder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(100, mBuilder.build());
+        mNotificationManager.notify(100, builder.build());
 
     }
 }

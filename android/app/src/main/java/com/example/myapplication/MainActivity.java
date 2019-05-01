@@ -2,12 +2,14 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Looper;
@@ -16,6 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myapplication.models.Waypoint;
+import com.example.myapplication.services.DBAdapter;
+import com.example.myapplication.services.GeofenceTransitionsIntentService;
 import com.example.myapplication.services.MqttMessageService;
 import com.example.myapplication.services.PahoMqttClient;
 import com.example.myapplication.views.WaypointActivity;
@@ -23,11 +28,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -35,6 +45,9 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
+import static com.google.android.gms.location.Geofence.NEVER_EXPIRE;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener,
@@ -50,13 +63,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Location lastLocation;
     private LocationCallback locationCallBack;
     private static final int REQ_PERMISSION = 35;
-    private static final String GEOFENCE_REQ_ID = "My Geofence";
+    DBAdapter dbHelper;
+
+    private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
+    // Create a Intent send by the notification
+    public static Intent makeNotificationIntent(Context context, String msg) {
+        Intent intent = new Intent( context, MainActivity.class );
+        intent.putExtra( NOTIFICATION_MSG, msg );
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pahoMqttClient = new PahoMqttClient();
+        dbHelper = new DBAdapter(this);
       //  private GeofencingClient geofencingClient;
         textMessage = (EditText) findViewById(R.id.publishText);
         publishMessage = (Button) findViewById(R.id.publishButton);
@@ -109,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 addWaypoint(v);
             }
         });
+        startGeofence();
         Intent intent = new Intent(MainActivity.this, MqttMessageService.class);
         startService(intent);
     }
@@ -174,16 +197,112 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
     }
-    private Geofence createGeofence( LatLng latLng, float radius ) {
+
+    private ArrayList<Waypoint> getDataSet(){
+        ArrayList<Waypoint> results = new ArrayList<Waypoint>();
+        if(results.size()>0)
+            results.clear();
+        String data = dbHelper.getData();
+        if(data != null && !data.isEmpty()) {
+            String[] waypoints = data.split("\n");
+            for (String w : waypoints) {
+                String[] waypoint = w.split(";");
+                String name = waypoint[0];
+                double latitude = Double.parseDouble(waypoint[1]);
+                double longitude = Double.parseDouble(waypoint[2]);
+                int radius = Integer.parseInt(waypoint[3]);
+                Waypoint obj = new Waypoint(name, latitude, longitude, radius);
+                results.add(obj);
+
+            }
+
+        }
+        else {
+            Waypoint obj = new Waypoint("Test", 45.5555,45.55555,150);
+            results.add(obj);
+        }
+        return results;
+    }
+
+
+    private void startGeofence(){
+        Log.i(TAG, "startGeofence()");
+        ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
+        waypoints = getDataSet();
+        if(waypoints.size() > 0) {
+            for (int i = 0; i < waypoints.size() - 1; i++) {
+                double latitude = waypoints.get(i).getWaypointLatitude();
+                double longitude = waypoints.get(i).getWaypointLongitude();
+                String name = waypoints.get(i).getWaypointName();
+                int radius = waypoints.get(i).getWaypointRadius();
+                LatLng latLng = new LatLng(latitude, longitude);
+                Geofence geofence = createGeofence(latLng, radius, name);
+                GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
+                addGeofence(geofenceRequest);
+            }
+        }
+        else
+            Log.d(TAG, "No waypoints to make geofences");
+
+    }
+
+
+    private Geofence createGeofence(LatLng latLng, float radius, String name ) {
         Log.d(TAG, "createGeofence");
         return new Geofence.Builder()
-                .setRequestId(GEOFENCE_REQ_ID)
+                .setRequestId(name)
                 .setCircularRegion( latLng.latitude, latLng.longitude, radius)
                 .setExpirationDuration( NEVER_EXPIRE )
                 .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
                         | Geofence.GEOFENCE_TRANSITION_EXIT )
                 .build();
     }
+
+    //Create a Geofence Request
+    private GeofencingRequest createGeofenceRequest(Geofence geofence){
+        Log.d(TAG, "createGeofenceRequest");
+        return new GeofencingRequest.Builder()
+                .setInitialTrigger( GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .addGeofence( geofence )
+                .build();
+    }
+
+    private PendingIntent geoFencePendingIntent;
+    private final int GEOFENCE_REQ_CODE = 0;
+
+
+    private PendingIntent createGeofencePendingIntent(){
+        Log.d(TAG, "createGeofencePendingIntent()");
+        if(geoFencePendingIntent != null)
+            return geoFencePendingIntent;
+
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    //Add the created GeofenceRequest to the device's monitoring list
+    private void addGeofence(GeofencingRequest request){
+        Log.d(TAG, "addGeofence()");
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)  {
+            GeofencingClient client = LocationServices.getGeofencingClient(this);
+            client.addGeofences(request, createGeofencePendingIntent())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.i(TAG, "Geofence created");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "Geofence Creation Failed");
+                        }
+                    });
+        }
+
+    }
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
