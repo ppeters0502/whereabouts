@@ -1,13 +1,16 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import com.example.myapplication.models.Waypoint;
 import com.example.myapplication.services.DBAdapter;
 import com.example.myapplication.services.GeofenceTransitionsIntentService;
 import com.example.myapplication.services.MqttMessageService;
+import com.example.myapplication.services.NotificationUtility;
 import com.example.myapplication.services.PahoMqttClient;
 import com.example.myapplication.views.WaypointActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationCallback locationCallBack;
     private static final int REQ_PERMISSION = 35;
     DBAdapter dbHelper;
+    NotificationUtility mNotificationUtility;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     // Create a Intent send by the notification
@@ -73,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         return intent;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,13 +97,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         unSubscribeTopic = (EditText) findViewById(R.id.unSubscribeText);
         client = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
 
+        //Test Notification
+        mNotificationUtility = new NotificationUtility(this);
+
+
         publishMessage.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Log.i(TAG, "Publish Message Attempt");
                 String msg = textMessage.getText().toString().trim();
                 if(!msg.isEmpty()){
                     try{
                         pahoMqttClient.publishMessage(client, msg, 1, Constants.PUBLISH_TOPIC);
+                        Notification.Builder nb = mNotificationUtility.getGeofenceChannelNotification("Message Published!", "On Topic"+Constants.PUBLISH_TOPIC);
+                        mNotificationUtility.getManager().notify(101, nb.build());
                     } catch(MqttException e){
                         e.printStackTrace();
                     } catch(UnsupportedEncodingException e){
@@ -111,7 +124,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         subscribe.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                addWaypoint(v);
+                String topic = subscribeTopic.getText().toString().trim();
+                if (!topic.isEmpty()) {
+                    try {
+                        pahoMqttClient.subscribe(client, topic, 1);
+                        Notification.Builder nb = mNotificationUtility.getGeofenceChannelNotification("Successfully Subscribed", "Subscribed to "+topic);
+                        mNotificationUtility.getManager().notify(101, nb.build());
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -132,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
         startGeofence();
+        getLastKnownLocation();
         Intent intent = new Intent(MainActivity.this, MqttMessageService.class);
         startService(intent);
     }

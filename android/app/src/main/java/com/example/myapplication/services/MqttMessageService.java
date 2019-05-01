@@ -1,5 +1,6 @@
 package com.example.myapplication.services;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -24,36 +25,39 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class MqttMessageService extends Service {
     private static final String TAG = "MqttMessageService";
     private PahoMqttClient pahoMqttClient;
     private MqttAndroidClient mqttAndroidClient;
+    NotificationUtility mNotificationUtility;
 
-    public MqttMessageService(){
 
+    public MqttMessageService() {
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
         pahoMqttClient = new PahoMqttClient();
         mqttAndroidClient = pahoMqttClient.getMqttClient(getApplicationContext(), Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
+        mNotificationUtility = new NotificationUtility(this);
         mqttAndroidClient.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean b, String s) {
-
+                Log.i(TAG, "connectComplete()");
             }
 
             @Override
             public void connectionLost(Throwable throwable) {
-                Log.w(TAG, "connectionLost()");
+                Log.i(TAG, "connectionLost()");
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
                 setMessageNotification(s, new String(mqttMessage.getPayload()));
-                Log.i(TAG,"messageArrived()");
+                Log.i(TAG, "messageArrived()");
             }
 
             @Override
@@ -64,42 +68,25 @@ public class MqttMessageService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId){
+    public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand");
         return START_STICKY;
     }
 
     @Override
-    public IBinder onBind(Intent intent){
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void setMessageNotification(@NonNull String topic, @NonNull String msg){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "MQTT Channel")
-                .setSmallIcon(R.drawable.ic_message_black_24dp)
-                .setContentTitle(topic)
-                .setContentText(msg)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(100, builder.build());
-
+    private void setMessageNotification(@NonNull String topic, @NonNull String msg) {
+        Notification.Builder nb = mNotificationUtility.getGeofenceChannelNotification(msg, "on "+topic+" topic");
+        mNotificationUtility.getManager().notify(101, nb.build());
     }
 }

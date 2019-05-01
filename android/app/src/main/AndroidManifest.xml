@@ -33,7 +33,7 @@
         -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="YOUR_API_KEY_HERE" />
+            android:value="YOUR_API_KEY" />
 
         <activity
             android:name=".WayPointSelectionActivity"
@@ -49,6 +49,7 @@
         </activity>
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
+        <service android:name=".services.MqttMessageService"/>
         <service android:name=".services.GeofenceTransitionsIntentService"/>
     </application>
 

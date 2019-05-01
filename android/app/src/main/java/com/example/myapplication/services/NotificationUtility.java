@@ -3,6 +3,7 @@ package com.example.myapplication.services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
@@ -39,7 +40,7 @@ public class NotificationUtility extends ContextWrapper {
 
     }
 
-    private NotificationManager getManager() {
+    public NotificationManager getManager() {
         if (mManager == null) {
             mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
@@ -51,6 +52,16 @@ public class NotificationUtility extends ContextWrapper {
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(android.R.drawable.stat_notify_more)
+                .setAutoCancel(true);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Notification.Builder getPendingGeofenceChannelNotification(String title, String body, PendingIntent notificationPendingIntent){
+        return new Notification.Builder(getApplicationContext(), GEOFENCE_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setSmallIcon(android.R.drawable.stat_notify_more)
+                .setContentIntent(notificationPendingIntent)
                 .setAutoCancel(true);
     }
     

@@ -1,5 +1,6 @@
 package com.example.myapplication.services;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -31,7 +32,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     private static final String TAG = GeofenceTransitionsIntentService.class.getSimpleName();
     public static final int GEOFENCE_NOTIFICATION_ID = 0;
-
+    NotificationUtility mNotificationUtility;
     public GeofenceTransitionsIntentService() {
         super(TAG);
     }
@@ -45,6 +46,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
             Log.e(TAG, errorMessage);
             return;
         }
+
         //retrieve the GeofenceTransition
         int geoFenceTransition = geofencingEvent.getGeofenceTransition();
 
@@ -90,40 +92,31 @@ public class GeofenceTransitionsIntentService extends IntentService {
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Creating and sending Notifications
-        NotificationManager notManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notManager.notify(GEOFENCE_NOTIFICATION_ID, createNotification(msg, notificationPendingIntent));
+//        NotificationManager notManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notManager.notify(GEOFENCE_NOTIFICATION_ID, createNotification(msg, notificationPendingIntent));
+        mNotificationUtility.getManager().notify(101, createNotification(msg, notificationPendingIntent));
+
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private Notification createNotification(String msg, PendingIntent notificationPendingIntent){
         String NOTIFICATION_CHANNEL_ID = "My_Geofence_Channel";
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        notificationBuilder
-                .setSmallIcon(R.drawable.ic_action_location)
-                .setColor(Color.RED)
-                .setContentTitle("Geofence Notification!")
-                .setContentIntent(notificationPendingIntent)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setStyle(new NotificationCompat.BigTextStyle())
-                .setPriority(NotificationManager.IMPORTANCE_HIGH);
-        return notificationBuilder.build();
+//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+//        notificationBuilder
+//                .setSmallIcon(R.drawable.ic_action_location)
+//                .setColor(Color.RED)
+//                .setContentTitle("Geofence Notification!")
+//                .setContentIntent(notificationPendingIntent)
+//                .setDefaults(Notification.DEFAULT_ALL)
+//                .setStyle(new NotificationCompat.BigTextStyle())
+//                .setPriority(NotificationManager.IMPORTANCE_HIGH);
+//        return notificationBuilder.build();
+        Notification.Builder nb = mNotificationUtility.getPendingGeofenceChannelNotification("Geolocation Update!", msg, notificationPendingIntent);
+        return nb.build();
     }
 
 
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Location Services";
-            String description = "My Notification Channel";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("zero", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 
 
     //error handling
