@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Location lastLocation;
     private LocationCallback locationCallBack;
     private static final int REQ_PERMISSION = 35;
+    private static final String GEOFENCE_REQ_ID = "My Geofence";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +174,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
     }
+    private Geofence createGeofence( LatLng latLng, float radius ) {
+        Log.d(TAG, "createGeofence");
+        return new Geofence.Builder()
+                .setRequestId(GEOFENCE_REQ_ID)
+                .setCircularRegion( latLng.latitude, latLng.longitude, radius)
+                .setExpirationDuration( NEVER_EXPIRE )
+                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT )
+                .build();
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(TAG, "onConnected()");

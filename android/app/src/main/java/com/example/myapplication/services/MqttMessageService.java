@@ -46,18 +46,19 @@ public class MqttMessageService extends Service {
 
             @Override
             public void connectionLost(Throwable throwable) {
-
+                Log.w(TAG, "connectionLost()");
             }
 
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
                 setMessageNotification(s, new String(mqttMessage.getPayload()));
+                Log.i(TAG,"messageArrived()");
             }
 
             @Override
             public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-
+                Log.i(TAG, "deliveryComplete()");
             }
         });
     }
