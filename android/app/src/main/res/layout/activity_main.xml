@@ -95,15 +95,7 @@
         tools:layout_editor_absoluteX="36dp"
         tools:layout_editor_absoluteY="521dp" />
 
-    <Button
-        android:id="@+id/locationCheck"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="checkLocation"
-        android:layout_below="@+id/unSubscribeButton"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="521dp" />
+
 
 
 
